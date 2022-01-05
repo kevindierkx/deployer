@@ -41,26 +41,6 @@ if (empty($deployFile)) {
     $deployFile = $lookUp('deploy.yml');
 }
 
-// Find project-local Deployer installation
-if (!isset($localBinaryOverrideFound)) {
-    $binaries = [
-        dirname($deployFile) . '/vendor/bin/dep',
-        dirname($deployFile) . '/deployer.phar',
-        getcwd() . '/vendor/bin/dep',
-        getcwd() . '/deployer.phar',
-    ];
-    foreach ($binaries as $binary) {
-        if (file_exists($binary)) {
-            if (realpath($binary) === realpath(__FILE__)) {
-                break; // Already required this binary
-            }
-            $localBinaryOverrideFound = true; // Only do it once.
-            require $binary;
-            exit;
-        }
-    }
-}
-
 // Detect autoload location
 $autoload = [
     __DIR__ . '/../vendor/autoload.php', // The dep located at "deployer.phar/bin" or in development.
